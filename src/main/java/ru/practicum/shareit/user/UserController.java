@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Controller end-point "/users"
@@ -52,7 +52,7 @@ public class UserController {
      * Получение всех user
      */
     @GetMapping
-    public Collection<UserDto> getAll() {
+    public List<UserDto> getAll() {
         log.info("GET all users");
         return userService.getAll();
     }
@@ -65,4 +65,5 @@ public class UserController {
         log.info("DELETE user by id={}", id);
         userService.delete(id);
     }
+
 }

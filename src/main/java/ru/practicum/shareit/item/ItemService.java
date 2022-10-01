@@ -1,41 +1,50 @@
 package ru.practicum.shareit.item;
 
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoCreate;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoInfo;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
- * Интерфейс для работы с item
+ * Интерфейс для работы с item и comment
  */
 public interface ItemService {
 
     /**
      * создать item
      */
-    ItemDto add(ItemDto itemDto, Long idUser);
+    ItemDto addItem(ItemDto itemDto, Long idUser);
 
     /**
      * обновить item
      */
-    ItemDto update(ItemDto itemDto, Long itemId, Long idUser);
+    ItemDto updateItem(ItemDto itemDto, Long itemId, Long idUser);
 
     /**
      * получить item по id
      */
-    ItemDto getOne(Long itemId);
+    ItemDtoInfo getOneItem(Long itemId, Long userId);
 
     /**
      * удалить item
      */
-    void delete(Long itemId, Long userId);
+    void deleteItem(Long itemId, Long userId);
 
     /**
      * получить всех item по id user
      */
-    Collection<ItemDto> getAllByOwner(Long userId);
+    List<ItemDtoInfo> getAllItemsByOwner(Long userId);
 
     /**
      * поиск item по тексту
      */
-    Collection<ItemDto> searchByText(String text);
+    List<ItemDto> searchItemsByText(String text);
+
+    /**
+     * добавить comment
+     */
+    CommentDto addComment(Long userId, Long itemId, CommentDtoCreate commentDtoCreate);
 }
+
