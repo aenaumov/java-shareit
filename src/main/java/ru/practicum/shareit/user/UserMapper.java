@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +31,7 @@ public class UserMapper {
         return new User(userId, name, email);
     }
 
-    public Collection<UserDto> toUserDtoCollection(Collection<User> users) {
+    public List<UserDto> toUserDtoList(List<User> users) {
         return users.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
