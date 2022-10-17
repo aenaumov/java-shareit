@@ -25,35 +25,24 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOKING_ID")
-    Long id;
+    private Long id;
 
     @Column(name = "START_BOOKING")
-    LocalDateTime start;
+    private LocalDateTime start;
 
     @Column(name = "END_BOOKING")
-    LocalDateTime end;
+    private LocalDateTime end;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ITEM_ID", nullable = false)
-    Item item;
+    private Item item;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID", nullable = false)
-    User booker;
+    private User booker;
 
     @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
-    BookingStatus status;
+    private BookingStatus status;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Booking)) return false;
-        return id != null && id.equals(((Booking) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

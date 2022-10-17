@@ -25,6 +25,8 @@ public class ItemDtoInfo {
 
     private Boolean available;
 
+    private Long requestId;
+
     private BookingDto lastBooking;
 
     private BookingDto nextBooking;
@@ -35,19 +37,19 @@ public class ItemDtoInfo {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class BookingDto {
-        Long id;
-        LocalDateTime start;
-        LocalDateTime end;
-        Long bookerId;
+        private Long id;
+        private LocalDateTime start;
+        private LocalDateTime end;
+        private Long bookerId;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CommentDto {
-        Long id;
-        String text;
-        String authorName;
-        LocalDateTime created;
+        private Long id;
+        private String text;
+        private String authorName;
+        private LocalDateTime created;
     }
 }

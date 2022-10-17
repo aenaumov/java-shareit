@@ -1,11 +1,13 @@
 package ru.practicum.shareit.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.common.ShareItPageRequest;
 import ru.practicum.shareit.exception.AuthorNotBookerOfItemException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
@@ -82,27 +84,22 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDtoInfo> getAllItemsByOwner(Long userId) {
+    public List<ItemDtoInfo> getAllItemsByOwner(Long userId, Integer from, Integer size) {
         final User owner = getUserById(userId);
-        final List<Item> items = itemRepository.getAllByOwner(owner);
-        final List<ItemDtoInfo> itemsDtoLastNext = new ArrayList<>();
-        for (Item item : items) {
-            Booking lastBooking = getLastBooking(item.getId());
-            Booking nextBooking = getNextBooking(item.getId());
-            List<Comment> comments = getCommentsByItem(item);
-            itemsDtoLastNext.add(itemMapper.toItemDtoInfo(item, lastBooking, nextBooking, comments));
-        }
-        return itemsDtoLastNext;
+        final Pageable pageable = new ShareItPageRequest(from, size, Sort.unsorted());
+        final List<Item> page = itemRepository.getAllByOwner(owner, pageable);
+        return toItemDtoInfoList(page);
     }
 
     @Override
-    public List<ItemDto> searchItemsByText(String text) {
+    public List<ItemDto> searchItemsByText(String text, Integer from, Integer size) {
         if (text.isEmpty()) {
             return Collections.emptyList();
         }
         text = "%" + text + "%";
-        final List<Item> items = itemRepository.searchAvailableItemsByText(text);
-        return itemMapper.toItemDtoList(items);
+        final Pageable pageable = new ShareItPageRequest(from, size, Sort.unsorted());
+        final List<Item> page = itemRepository.searchAvailableItemsByText(text, pageable);
+        return itemMapper.toItemDtoList(page);
     }
 
     @Transactional
@@ -115,8 +112,8 @@ public class ItemServiceImpl implements ItemService {
                     String.format("user id %d isn't booker of item id %d", userId, itemId));
         }
         Comment comment = commentMapper.toComment(commentDtoCreate, author, item);
-        commentRepository.save(comment);
-        return commentMapper.commentDtoInfo(comment);
+        comment = commentRepository.save(comment);
+        return commentMapper.toCommentDto(comment);
     }
 
     private Item getItemById(Long id) {
@@ -149,6 +146,17 @@ public class ItemServiceImpl implements ItemService {
 
     private List<Comment> getCommentsByItem(Item item) {
         return commentRepository.findCommentsByItem(item);
+    }
+
+    private List<ItemDtoInfo> toItemDtoInfoList(List<Item> items) {
+        final List<ItemDtoInfo> itemsDtoInfo = new ArrayList<>();
+        for (Item item : items) {
+            Booking lastBooking = getLastBooking(item.getId());
+            Booking nextBooking = getNextBooking(item.getId());
+            List<Comment> comments = getCommentsByItem(item);
+            itemsDtoInfo.add(itemMapper.toItemDtoInfo(item, lastBooking, nextBooking, comments));
+        }
+        return itemsDtoInfo;
     }
 
 }

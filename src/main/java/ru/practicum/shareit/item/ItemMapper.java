@@ -18,11 +18,20 @@ import java.util.stream.Collectors;
 @Component
 public class ItemMapper {
     public ItemDto toDto(Item item) {
-        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
+        return new ItemDto(item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getRequestId());
     }
 
     public Item toItem(ItemDto itemDto, Long itemId, User user) {
-        return new Item(itemId, user, itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable());
+        return new Item(itemId,
+                user,
+                itemDto.getName(),
+                itemDto.getDescription(),
+                itemDto.getAvailable(),
+                itemDto.getRequestId());
     }
 
     public List<ItemDto> toItemDtoList(List<Item> items) {
@@ -34,6 +43,7 @@ public class ItemMapper {
     public ItemDtoInfo toItemDtoInfo(Item item, Booking lastBooking, Booking nextBooking, List<Comment> comments) {
         return new ItemDtoInfo(item.getId(), item.getName(),
                 item.getDescription(), item.getAvailable(),
+                item.getRequestId(),
                 lastBooking != null ? new ItemDtoInfo.BookingDto(lastBooking.getId(),
                         lastBooking.getStart(),
                         lastBooking.getEnd(),

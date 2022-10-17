@@ -99,4 +99,12 @@ public class ErrorHandler {
                 e.getMessage(),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleItemRequestNotFound(final ItemRequestNotFoundException e) {
+        log.info("404 {}", e.getMessage());
+        return new ResponseEntity<>(
+                e.getMessage(),
+                HttpStatus.NOT_FOUND);
+    }
 }

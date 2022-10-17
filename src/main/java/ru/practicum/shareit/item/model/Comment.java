@@ -24,31 +24,20 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_ID")
-    Long id;
+    private Long id;
 
     @Column(name = "COMMENT_TEXT")
-    String text;
+    private String text;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID", nullable = false)
-    User author;
+    private User author;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ITEM_ID", nullable = false)
-    Item item;
+    private Item item;
 
     @Column(name = "CREATED")
-    LocalDateTime created;
+    private LocalDateTime created;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Comment)) return false;
-        return id != null && id.equals(((Comment) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

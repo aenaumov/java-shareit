@@ -4,13 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.common.Create;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentDtoCreate;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoInfo;
-import ru.practicum.shareit.user.Create;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@Validated
 @RequestMapping("/items")
 public class ItemController {
 
@@ -29,7 +31,7 @@ public class ItemController {
      */
     @PostMapping
     public ItemDto post(@Validated(Create.class) @RequestBody ItemDto itemDto,
-                        @NotBlank @RequestHeader("X-Sharer-User-Id") Long idUser) {
+                        @RequestHeader("X-Sharer-User-Id") Long idUser) {
         log.info("POST item {} by user id {}", itemDto, idUser);
         return itemService.addItem(itemDto, idUser);
     }
@@ -59,16 +61,20 @@ public class ItemController {
      * Получение всех Item владельцем
      */
     @GetMapping
-    public List<ItemDtoInfo> getAllByOwner(@RequestHeader("X-Sharer-User-Id") Long idUser) {
+    public List<ItemDtoInfo> getAllByOwner(@RequestHeader("X-Sharer-User-Id") Long idUser,
+                                           @RequestParam(required = false, defaultValue = "0")
+                                           @PositiveOrZero Integer from,
+                                           @RequestParam(required = false, defaultValue = "10")
+                                           @Positive Integer size) {
         log.info("GET all items by owner {}", idUser);
-        return itemService.getAllItemsByOwner(idUser);
+        return itemService.getAllItemsByOwner(idUser, from, size);
     }
 
     /**
      * Удаление Item по id владельцем
      */
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id,
+    public void deleteItemByUser(@PathVariable Long id,
                            @RequestHeader("X-Sharer-User-Id") Long idUser) {
         log.info("DELETE item by id={}", id);
         itemService.deleteItem(id, idUser);
@@ -78,9 +84,13 @@ public class ItemController {
      * Поиск Item по тексту
      */
     @GetMapping("/search")
-    public List<ItemDto> searchItemByText(@RequestParam String text) {
+    public List<ItemDto> searchItemByText(@RequestParam String text,
+                                          @RequestParam(required = false, defaultValue = "0")
+                                          @PositiveOrZero Integer from,
+                                          @RequestParam(required = false, defaultValue = "10")
+                                          @Positive Integer size) {
         log.info("GET items по поиску по тексту {}", text);
-        return itemService.searchItemsByText(text);
+        return itemService.searchItemsByText(text, from, size);
     }
 
     /**

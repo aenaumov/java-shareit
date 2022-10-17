@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
-import ru.practicum.shareit.user.Create;
+import ru.practicum.shareit.common.Create;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,4 +28,5 @@ public class ItemDto {
     @NotNull(groups = {Create.class}, message = ("поле available должно быть заполнено"))
     private Boolean available;
 
+    private Long requestId;
 }

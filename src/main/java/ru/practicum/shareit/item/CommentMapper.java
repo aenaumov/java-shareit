@@ -19,7 +19,7 @@ public class CommentMapper {
         return new Comment(null, commentDtoCreate.getText(), author, item, LocalDateTime.now());
     }
 
-    public CommentDto commentDtoInfo(Comment comment) {
+    public CommentDto toCommentDto(Comment comment) {
         return new CommentDto(comment.getId(), comment.getText(), comment.getAuthor().getName(), comment.getCreated());
     }
 }
