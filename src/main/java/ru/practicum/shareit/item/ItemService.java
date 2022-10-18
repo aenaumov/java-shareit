@@ -35,12 +35,12 @@ public interface ItemService {
     /**
      * получить всех item по id user
      */
-    List<ItemDtoInfo> getAllItemsByOwner(Long userId);
+    List<ItemDtoInfo> getAllItemsByOwner(Long userId, Integer from, Integer size);
 
     /**
      * поиск item по тексту
      */
-    List<ItemDto> searchItemsByText(String text);
+    List<ItemDto> searchItemsByText(String text, Integer from, Integer size);
 
     /**
      * добавить comment

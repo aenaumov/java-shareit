@@ -29,10 +29,10 @@ public interface BookingService {
     /**
      * Получение списка всех бронирований текущего пользователя.
      */
-    List<BookingDto> getAllBookerBookings(Long userId, BookingState state);
+    List<BookingDto> getAllBookerBookings(Long userId, BookingState state, Integer from, Integer size);
 
     /**
      * Получение списка бронирований для всех вещей текущего пользователя
      */
-    List<BookingDto> getAllOwnerBookings(Long userId, BookingState state);
+    List<BookingDto> getAllOwnerBookings(Long userId, BookingState state, Integer from, Integer size);
 }

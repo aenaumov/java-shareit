@@ -16,5 +16,5 @@ import javax.validation.constraints.Size;
 public class CommentDtoCreate {
     @NotBlank
     @Size(max = 500, message = "длина не более 500 знаков")
-    String text;
+    private String text;
 }

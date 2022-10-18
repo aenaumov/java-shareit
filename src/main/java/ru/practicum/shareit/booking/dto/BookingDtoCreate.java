@@ -21,12 +21,12 @@ public class BookingDtoCreate {
 
     @NotNull
     @FutureOrPresent
-    LocalDateTime start;
+    private LocalDateTime start;
 
     @NotNull
     @Future
-    LocalDateTime end;
+    private LocalDateTime end;
 
     @NotNull
-    Long itemId;
+    private Long itemId;
 }

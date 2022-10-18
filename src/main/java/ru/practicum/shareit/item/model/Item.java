@@ -38,16 +38,7 @@ public class Item {
     @Column(name = "ITEM_AVAILABLE")
     private Boolean available;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Item)) return false;
-        return id != null && id.equals(((Item) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @Column(name = "REQUEST_ID")
+    private Long requestId;
 
 }

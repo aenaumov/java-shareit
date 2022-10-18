@@ -18,7 +18,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-
     @Transactional
     @Override
     public UserDto add(UserDto userDto) {
@@ -35,7 +34,6 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(userDto.getEmail()).ifPresent(user::setEmail);
         return userMapper.toDto(user);
     }
-
 
     @Override
     public UserDto getOne(Long id) {

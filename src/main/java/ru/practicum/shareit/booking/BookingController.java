@@ -8,6 +8,8 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreate;
 import ru.practicum.shareit.exception.NotCorrectEnumException;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,11 +18,12 @@ import java.util.Optional;
  */
 @Slf4j
 @RestController
+@Validated
 @RequestMapping(path = "/bookings")
 public class BookingController {
 
     @Autowired
-    BookingService bookingService;
+    private BookingService bookingService;
 
     /**
      * Добавление бронирования вещи
@@ -58,13 +61,16 @@ public class BookingController {
      * Получение списка всех бронирований текущего пользователя.
      */
     @GetMapping
-    public List<BookingDto> getAllUserBookings(@RequestParam(required = false, defaultValue = "ALL") String state,
-                                               @RequestHeader("X-Sharer-User-Id") Long idUser) {
+    public List<BookingDto> getAllUserBookings(
+            @RequestParam(required = false, defaultValue = "ALL") String state,
+            @RequestHeader("X-Sharer-User-Id") Long idUser,
+            @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
         log.info("GET all bookings by user {}", idUser);
         Optional<BookingState> stateOptional = BookingState.from(state);
         BookingState bookingState = stateOptional
                 .orElseThrow(() -> new NotCorrectEnumException("Unknown state: " + state));
-        return bookingService.getAllBookerBookings(idUser, bookingState);
+        return bookingService.getAllBookerBookings(idUser, bookingState, from, size);
     }
 
     /**
@@ -73,12 +79,14 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> getAllOwnerBookings(
             @RequestParam(required = false, defaultValue = "ALL") String state,
-            @RequestHeader("X-Sharer-User-Id") Long idUser) {
+            @RequestHeader("X-Sharer-User-Id") Long idUser,
+            @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
         log.info("GET all bookings by owner {}", idUser);
         Optional<BookingState> stateOptional = BookingState.from(state);
         BookingState bookingState = stateOptional
                 .orElseThrow(() -> new NotCorrectEnumException("Unknown state: " + state));
-        return bookingService.getAllOwnerBookings(idUser, bookingState);
+        return bookingService.getAllOwnerBookings(idUser, bookingState, from, size);
 
     }
 }

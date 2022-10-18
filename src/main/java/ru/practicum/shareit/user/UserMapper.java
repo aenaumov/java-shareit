@@ -25,12 +25,6 @@ public class UserMapper {
         return new User(null, name, email);
     }
 
-    public User toUser(UserDto userDto, Long userId) {
-        String name = userDto.getName();
-        String email = userDto.getEmail();
-        return new User(userId, name, email);
-    }
-
     public List<UserDto> toUserDtoList(List<User> users) {
         return users.stream()
                 .map(this::toDto)
